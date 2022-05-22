@@ -1,9 +1,13 @@
-from django.forms import ModelForm, ValidationError
-from crm.models import Employee, Company
-from django.utils.translation import gettext as _
-from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, ButtonHolder, Submit, Div
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.forms import ModelForm, ValidationError, CharField
+from django.utils.translation import gettext as _
+from ckeditor.widgets import CKEditorWidget
+
+from crm.models import Employee, Company
+
 
 class UserForm(ModelForm):
     class Meta:
@@ -17,6 +21,8 @@ class EmployeeForm(ModelForm):
 
 
 class CompanyForm(ModelForm):
+    notes = CharField(widget=CKEditorWidget())
+
     def clean_identification_number(self):
         identification_number = self.cleaned_data['identification_number']
 
@@ -46,7 +52,7 @@ class CompanyForm(ModelForm):
 
     class Meta:
         model = Company
-        fields = ["name", "status", "phone_number", "email", "identification_number"]
+        fields = ["name", "status", "phone_number", "email", "identification_number", "notes"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -58,9 +64,18 @@ class CompanyForm(ModelForm):
                 Div("identification_number", css_class="col-sm-4"),
                 Div("email", css_class="col-sm-4"),
                 Div("phone_number", css_class="col-sm-4"),
+                Div("notes", css_class="col-sm-12"),
                 css_class="row",
             ),
             ButtonHolder(
                 Submit('submit', 'Submit', css_class='button')
             )
         )
+
+
+class RegisterUserForm(UserCreationForm):
+    username = CharField(required=True, label='Email')
+
+    class Meta:
+        model = User
+        fields = ("username", "password1", "password2")

@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
+from ckeditor.fields import RichTextField
 
 class Address(models.Model):
     street = models.CharField(max_length=200, blank=True, null=True)
@@ -29,6 +30,7 @@ class Company(models.Model):
     email = models.CharField(_("Email"),max_length=50, null=True, blank=True)
     identification_number = models.CharField(_("Identification Number"),max_length=100)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
+    notes = RichTextField()
 
     def __str__(self):
         return self.name
