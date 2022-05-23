@@ -7,8 +7,8 @@ from django.dispatch import receiver
 from crm.forms import EmployeeForm, UserForm, CompanyForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.translation import gettext as _
-from crm.forms import RegisterUserForm
-from crm.serializers import OpportunitySerializer
+from crm.forms import OpportunityForm, RegisterUserForm
+from crm.serializers import CompanySerializer, OpportunitySerializer
 from rest_framework import viewsets
 
 class IndexView(TemplateView):
@@ -32,14 +32,13 @@ class OpportunityListView(LoginRequiredMixin, ListView):
 class OpportunityCreateView(PermissionRequiredMixin, SuccessMessageMixin, CreateView):
     permission_required = 'crm.add_opportunity'
     template_name = "company/create_company.html"
-    fields = ["company", "sales_manager", "primary_contact", "description", "status"]
+    form_class = OpportunityForm
     success_url = reverse_lazy("index")
     success_message = "Opportunity created!"
 
 class OpportunityUpdateView(PermissionRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = models.Opportunity
+    form_class = OpportunityForm
     template_name = "opportunity/update_opportunity.html"
-    fields = ["company", "primary_contact", "description", "status"]
     success_url = reverse_lazy("index")
     success_message = "Opportunity updated!"
 
@@ -63,3 +62,7 @@ class RegisterView(CreateView):
 class OpportunityViewSet(viewsets.ModelViewSet):
     queryset = models.Opportunity.objects.all()
     serializer_class = OpportunitySerializer
+
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = models.Company.objects.all()
+    serializer_class = CompanySerializer

@@ -6,7 +6,7 @@ from django.forms import ModelForm, ValidationError, CharField
 from django.utils.translation import gettext as _
 from ckeditor.widgets import CKEditorWidget
 
-from crm.models import Employee, Company
+from crm.models import Employee, Company, Opportunity
 
 
 class UserForm(ModelForm):
@@ -19,6 +19,27 @@ class EmployeeForm(ModelForm):
         model = Employee
         fields = ('department', 'phone_number')
 
+
+class OpportunityForm(ModelForm):
+    class Meta:
+        model = Opportunity
+        fields = ["company", "primary_contact", "description", "status"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Div(
+                Div("company", css_class="col-sm-4"),
+                Div("primary_contact", css_class="col-sm-4"),
+                Div("status", css_class="col-sm-4"),
+                Div("description", css_class="col-sm-12"),
+                css_class="row",
+            ),
+            ButtonHolder(
+                Submit('submit', 'Submit', css_class='button')
+            )
+        )
 
 class CompanyForm(ModelForm):
     notes = CharField(widget=CKEditorWidget())

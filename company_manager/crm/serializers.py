@@ -9,3 +9,7 @@ class OpportunitySerializer(serializers.ModelSerializer):
         model = Opportunity
         fields = ['company', 'status', 'sales_manager', 'value']
 
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = ['name', 'status', 'identification_number', 'email']

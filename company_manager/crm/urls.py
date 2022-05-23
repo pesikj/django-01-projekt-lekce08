@@ -5,6 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'opportunities', views.OpportunityViewSet)
+router.register(r'companies', views.CompanyViewSet)
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),

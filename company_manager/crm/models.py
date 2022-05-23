@@ -30,7 +30,7 @@ class Company(models.Model):
     email = models.CharField(_("Email"),max_length=50, null=True, blank=True)
     identification_number = models.CharField(_("Identification Number"),max_length=100)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
-    notes = RichTextField()
+    notes = RichTextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
